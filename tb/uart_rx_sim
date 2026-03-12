@@ -389,3 +389,5 @@ T_6.4 ;
     "<interactive>";
     "tb/uart_rx_tb.v";
     "rtl/uart_rx.v";
+
+# Updated for Week 1 & 2 Project

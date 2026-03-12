@@ -21,3 +21,5 @@ with open(RTL_DIR + 'test_vectors.mem', 'w') as f:
 print(f"Generated {len(df)} test vectors")
 print(f"Saved to {RTL_DIR}test_vectors.mem")
 # Updated for Week 1 & 2
+
+# Updated for Week 1 & 2 Project
