@@ -97,3 +97,4 @@ matches = np.sum(float_preds == int8_preds)
 print(f"\nFloat32 vs INT8 agreement: {matches}/100 samples")
 print(f"Quantization accuracy loss: {100-matches}%")
 print("\nAll quantized weights saved successfully")
+# Updated for Week 1 & 2

@@ -81,3 +81,4 @@ print(f"\n--- RESULTS ---")
 print(f"Dropout accuracy:    {acc:.4f}")
 print(f"No-dropout accuracy: {acc_nd:.4f}")
 print("All files saved to", ML_DIR)
+# Updated for Week 1 & 2
