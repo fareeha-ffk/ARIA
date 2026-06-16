@@ -162,7 +162,6 @@ ARIA uses a 3-layer verification approach:
 
 ### Waveforms (GTKWave)
 
-Run `gtkwave tb/<module>.vcd` for each module:
 
 | Module | Waveform | Tests |
 |--------|----------|-------|
