@@ -10,11 +10,11 @@ Real-time air quality classifier running a 2-layer INT8 neural network entirely 
 
 ## Vision
 
-ARIA is built around a two-wearable concept: one device worn close to the body capturing physiological signals, and one worn externally capturing environmental exposure. The goal is to determine in real time whether pollution, heat, or poor ventilation is contributing to physical symptoms — not just whether air quality is poor in isolation.
+### Two-Wearable Vision (Phase 2)
+
+ARIA targets dual-stream sensing: body-worn physiological + external environmental. **Phase 2:** BiLSTM ensemble on FPGA for temporal pattern analysis.
 
 <img width="1402" height="1122" alt="ChatGPT Image Jun 17, 2026 at 01_40_15 AM" src="https://github.com/user-attachments/assets/eb08010b-9660-4e7b-a6ba-0cf23ba005df" />
-
-Fusing both streams lets the system distinguish between high pollution with no physiological effect, high pollution with active health impact, and physiological spikes from exertion rather than exposure. The full system targets a BiLSTM ensemble on the FPGA for temporal pattern analysis. Fixed-point quantization keeps inference within the device's power and memory bounds.
 
 ## Current Implementation — Phase 1
 
@@ -50,6 +50,18 @@ ARIA is a multi-domain sensing and inference system composed of:
 <img width="1672" height="941" alt="generated-image" src="https://github.com/user-attachments/assets/e9a841e8-229b-4a40-9c0f-dcc1f9b5ac66" />
 
 ## ML Pipeline (Training → Quantization → Deployment)
+
+### Dataset Statistics (10,000 Synthetic Samples)
+
+| Feature | Min | Max | Mean | Std |
+|---------|-----|-----|------|-----|
+| PM2.5 (μg/m³) | 0 | 500 | 247.1 | 143.8 |
+| VOC (ppb) | 0 | 1000 | 504.5 | 289.3 |
+| Heat Index (°C) | 20 | 50 | 35.0 | 8.6 |
+| Heart Rate (bpm) | 40 | 180 | 109.8 | 40.5 |
+| SpO2 (%) | 70 | 100 | 92.5 | 4.3 |
+
+**Distribution:** Warning 66.7%, Danger 33.3%, Safe 0% (clinically hazardous classes emphasized; Safe trivially identifiable).
 
 ### 1. Dataset Generation
 - 10,000 synthetic samples (Dhaka environmental model)
@@ -89,22 +101,6 @@ ARIA is a multi-domain sensing and inference system composed of:
 - Outcome:
   - 4× memory reduction
   - ~0% accuracy loss (on golden set)
- 
-  - \begin{table}[h]
-\centering
-\caption{Dataset Statistics (10,000 Synthetic Samples)}
-\label{tab:dataset}
-\begin{tabular}{lrrrr}
-\textbf{Feature} & \textbf{Min} & \textbf{Max} & \textbf{Mean} & \textbf{Std} \\
-PM2.5 (μg/m³) & 0 & 500 & 247.1 & 143.8 \\
-VOC (ppb) & 0 & 1000 & 504.5 & 289.3 \\
-Heat Index (°C) & 20 & 50 & 35.0 & 8.6 \\
-Heart Rate (bpm) & 40 & 180 & 109.8 & 40.5 \\
-SpO2 (\%) & 70 & 100 & 92.5 & 4.3 \\
-\end{tabular}
-\end{table}
-
-\textbf{Distribution:} Warning 66.7\%, Danger 33.3\%, Safe 0\% (clinically hazardous classes emphasized; Safe trivially identifiable).
  
 ## Hardware–Software Co-Design Mapping
 
@@ -149,26 +145,72 @@ ARIA uses a 3-layer verification approach:
   - DSP: 50%
 - Golden vector match: 99.0%
 - Quantization error: 0% (bit-exact on 100 samples subset)
+  
+## Five Experiments Summary
 
-- ## Key Innovations
+| Experiment | Key Result |
+|------------|------------|
+| Quantization (INT8 vs float32) | 100% agreement, 3.9× memory reduction |
+| Sensor Failure (0-5 channels) | Dropout model degrades slower |
+| Resources (LUT/FF/DSP) | 2.4% LUT, 2.0% FF, 50% DSP |
+| CDC Reliability (MTBF) | >10⁶ hours (Gray code + 2-FF sync) |
+| Critical Path (50MHz) | 11.8ns delay, +8.2ns slack |
+
+**Golden Vector Verification:** 992/1,002 pass (99.0%) — all 10 failures are Danger→Warning misclassifications near decision boundary (fixed-point accumulator overflow). **INT8 vs Float32 agreement:** 100% (1,002/1,002).
+
+ ## Key Innovations
 
 - Dual-stream sensing (physiological + environmental fusion)
 - Real-time FPGA INT8 neural inference (no CPU dependency)
 - Sensor validity-aware inference (graceful degradation)
 - Hardware-safe ML pipeline with golden-vector parity testing
 - Power-aware FSM for wearable deployment
+  
+## Verification Results (1,059 Tests, 98.8% Pass)
 
-- ## Limitations
+| Module | Tests | Passed | Failed | Result |
+|--------|-------|--------|--------|--------|
+| uart_rx.v | 13 | 13 | 0 | ✅ PASS |
+| async_fifo.v | 15 | 15 | 0 | ✅ PASS |
+| validity_reg.v | 4 | 4 | 0 | ✅ PASS |
+| power_fsm.v | 5 | 5 | 0 | ✅ PASS |
+| goai_wrapper_nn.v* | 5 | 2 | 3 | ⚠️ PARTIAL |
+| output_fsm.v | 6 | 6 | 0 | ✅ PASS |
+| top.v (system) | 2 | 2 | 0 | ✅ PASS |
+| **Golden vectors** | **1,002** | **992** | **10** | **99.0%** |
+| **SVA properties** | **7** | **7** | **0** | **✅ PASS** |
 
-- Synthetic dataset only (no real-world calibration yet)
-- No PM2.5 ground-truth sensor integration in current hardware
-- Model currently non-temporal (no BiLSTM yet)
-- Mobile app is reporting-only (no closed-loop adaptation)
+*Directed test failures: arbitrary values not matching model boundaries (see [Limitations]). Golden vectors use real model inputs.
+
+**SVA Properties (0 violations):**
+1. FIFO full → wr_en=0 next cycle
+2. class_out != 2'b11 on result_valid
+3. led_danger == alert_out always
+4. Only one LED active at a time
+5. All clk_en=0 in SLEEP state
+6. active_count <= 6 always
+7. FSM state <= max_state always
+
+## Scope & Limitations
+
+**Phase 1 (this repo):** Simulation-only (Icarus Verilog verification, Gowin EDA target). Hardware deployment is Phase 2.
+
+| Limitation | Mitigation / Future |
+|------------|--------------------|
+| Synthetic dataset (Dhaka model) | Real PMS5003/BME688 integration planned |
+| No PM2.5 ground-truth (BME688 VOC broad-spectrum only) | Optical particle counter in Phase 2 |
+| Non-temporal model (no BiLSTM) | BiLSTM ensemble for temporal fusion |
+| Mobile app reporting-only | On-device continual learning from user feedback |
+
+**Dataset note:** 10,000 samples emphasize Warning/Danger (66.7%/33.3%) as clinically informative; Safe 0% is trivially identifiable and will be added in field data.
 
 ## Future Work
 
-- Integration of PMS5003 / BME688 real sensors
-- BiLSTM temporal fusion on FPGA
-- On-device continual learning from user feedback
-- Geo-tagged exposure heatmaps
-- Personalized risk scoring per user
+| Goal | Timeline | Impact |
+|------|----------|--------|
+| PMS5003 particle counter integration | Q3 2026 | PM2.5 ground-truth |
+| Real Dhaka field dataset collection | Q4 2026 | Retrain model (add Safe class) |
+| Layer 2 accumulators (24→32-bit) | Q3 2026 | Eliminate overflow edge cases |
+| BiLSTM temporal fusion on FPGA | Q1 2027 | Temporal pattern analysis |
+| On-device continual learning | Q2 2027 | Personalized risk scoring |
+| Geo-tagged exposure heatmaps | Q2 2027 | Mobile app closed-loop |
