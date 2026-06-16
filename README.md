@@ -158,6 +158,39 @@ ARIA uses a 3-layer verification approach:
 
 **Golden Vector Verification:** 992/1,002 pass (99.0%) — all 10 failures are Danger→Warning misclassifications near decision boundary (fixed-point accumulator overflow). **INT8 vs Float32 agreement:** 100% (1,002/1,002).
 
+## Visuals
+
+### Waveforms (GTKWave)
+
+Run `gtkwave tb/<module>.vcd` for each module:
+
+| Module | Waveform | Tests |
+|--------|----------|-------|
+| goai_wrapper_nn.v | [![goai](figures/goai_waveform.png)](tb/goai_wrapper.vcd) | 992/1002 (99.0%) |
+| validity_reg.v | [![validity](figures/validity_waveform.png)](tb/validity_reg.vcd) | 4/4 PASS |
+| power_fsm.v | [![power](figures/power_fsm_waveform.png)](tb/power_fsm.vcd) | 5/5 PASS |
+| output_fsm.v | [![output](figures/output_fsm_waveform.png)](tb/output_fsm_tb.vcd) | 6/6 PASS |
+
+*goai_wrapper: 6-state FSM (IDLE→COLLECT→LAYER1→LAYER2→OUTPUT→WAIT), 128 MACs, 960ns latency.*
+
+---
+
+### Synthesis (Gowin EDA)
+
+| Metric | Result |
+|--------|--------|
+| Timing | 50MHz, slack +8.2ns (critical path: Layer 1 MAC, 11.8ns) |
+| LUTs | 496 (2.4% of 20,736) |
+| FFs | 313 (2.0% of 15,552) |
+| DSPs | 24 (50% of 48, GoAI 2.0 MAC blocks) |
+| Power | ~1.2mA @ 50MHz (clock-gated IDLE/SLEEP) |
+
+![Circuit](figures/gowin_circuit.png) ![Timing](figures/gowin_timing.png) ![Resources](figures/gowin_resources.png)
+
+> **To generate:** GTKWave screenshots + Gowin EDA Reports (Timing/Resource/Power) → PNGs.
+
+---
+
  ## Key Innovations
 
 - Dual-stream sensing (physiological + environmental fusion)
