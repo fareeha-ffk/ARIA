@@ -166,10 +166,13 @@ Run `gtkwave tb/<module>.vcd` for each module:
 
 | Module | Waveform | Tests |
 |--------|----------|-------|
-| goai_wrapper_nn.v | [![goai](figures/goai_waveform.png)](tb/goai_wrapper.vcd) | 992/1002 (99.0%) |
-| validity_reg.v | [![validity](figures/validity_waveform.png)](tb/validity_reg.vcd) | 4/4 PASS |
-| power_fsm.v | [![power](figures/power_fsm_waveform.png)](tb/power_fsm.vcd) | 5/5 PASS |
-| output_fsm.v | [![output](figures/output_fsm_waveform.png)](tb/output_fsm_tb.vcd) | 6/6 PASS |
+| goai_wrapper_nn.v | <img width="1358" height="157" alt="Screenshot 2026-05-15 at 7 56 10 PM" src="https://github.com/user-attachments/assets/85ac0647-5b4b-4a64-980d-7aaf3107f88d" />
+| 992/1002 (99.0%) |
+| validity_reg.v | <img width="1356" height="118" alt="Screenshot 2026-05-15 at 8 03 03 PM" src="https://github.com/user-attachments/assets/f2b5e43a-4393-4008-9944-f1aae1f478c1" />
+ | 4/4 PASS |
+| power_fsm.v |<img width="1358" height="156" alt="Screenshot 2026-05-15 at 8 00 59 PM" src="https://github.com/user-attachments/assets/cac00028-a567-4eaa-beb1-5fab867d3cb6" />
+ | 5/5 PASS |
+| output_fsm.v | <img width="1355" height="202" alt="Screenshot 2026-05-15 at 7 58 40 PM" src="https://github.com/user-attachments/assets/9a939afc-94d9-4e26-a661-fde1f00a0b36" /> | 6/6 PASS |
 
 *goai_wrapper: 6-state FSM (IDLE→COLLECT→LAYER1→LAYER2→OUTPUT→WAIT), 128 MACs, 960ns latency.*
 
