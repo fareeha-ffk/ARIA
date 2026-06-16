@@ -90,6 +90,22 @@ ARIA is a multi-domain sensing and inference system composed of:
   - 4× memory reduction
   - ~0% accuracy loss (on golden set)
  
+  - \begin{table}[h]
+\centering
+\caption{Dataset Statistics (10,000 Synthetic Samples)}
+\label{tab:dataset}
+\begin{tabular}{lrrrr}
+\textbf{Feature} & \textbf{Min} & \textbf{Max} & \textbf{Mean} & \textbf{Std} \\
+PM2.5 (μg/m³) & 0 & 500 & 247.1 & 143.8 \\
+VOC (ppb) & 0 & 1000 & 504.5 & 289.3 \\
+Heat Index (°C) & 20 & 50 & 35.0 & 8.6 \\
+Heart Rate (bpm) & 40 & 180 & 109.8 & 40.5 \\
+SpO2 (\%) & 70 & 100 & 92.5 & 4.3 \\
+\end{tabular}
+\end{table}
+
+\textbf{Distribution:} Warning 66.7\%, Danger 33.3\%, Safe 0\% (clinically hazardous classes emphasized; Safe trivially identifiable).
+ 
 ## Hardware–Software Co-Design Mapping
 
 | ML Component | RTL Implementation |
