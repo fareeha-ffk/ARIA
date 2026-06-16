@@ -14,13 +14,6 @@ ARIA is built around a two-wearable concept: one device worn close to the body c
 
 <img width="1402" height="1122" alt="ChatGPT Image Jun 17, 2026 at 01_40_15 AM" src="https://github.com/user-attachments/assets/eb08010b-9660-4e7b-a6ba-0cf23ba005df" />
 
-| Layer | Node | Sensors |
-|---|---|---|
-| Exposure | External badge / bag | PM2.5, VOC, Temperature, Humidity, CO2 |
-| Response | Wrist / chest wearable | Heart Rate, SpO2, Respiratory Rate, HRV |
-| Inference | Tang Nano 20K FPGA | Fused edge classification — Safe / Warning / Danger |
-| Feedback | Mobile app | Symptom reports (suffocation, asthma, coughing) |
-
 Fusing both streams lets the system distinguish between high pollution with no physiological effect, high pollution with active health impact, and physiological spikes from exertion rather than exposure. The full system targets a BiLSTM ensemble on the FPGA for temporal pattern analysis. Fixed-point quantization keeps inference within the device's power and memory bounds.
 
 ## Current Implementation — Phase 1
