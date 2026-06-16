@@ -28,5 +28,5 @@ Fusing both streams lets the system distinguish between high pollution with no p
 This repository implements the FPGA inference core. Phase 1 classifies five fused sensor channels (PM2.5, VOC, Heat Index, HR, SpO2) using a 2-layer INT8 neural network in Verilog RTL on the GW2AR-18. Full two-wearable integration and BiLSTM temporal fusion are planned for Phase 2.
 
 
-<img width="1672" height="941" alt="generated-image" src="https://github.com/user-attachments/assets/a4e26358-7210-492a-8db6-d6a221093296" />
+<img width="1672" height="941" alt="generated-image" src="https://github.com/user-attachments/assets/e9a841e8-229b-4a40-9c0f-dcc1f9b5ac66" />
 
