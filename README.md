@@ -12,6 +12,8 @@ Real-time air quality classifier running a 2-layer INT8 neural network entirely 
 
 ARIA is built around a two-wearable concept: one device worn close to the body capturing physiological signals, and one worn externally capturing environmental exposure. The goal is to determine in real time whether pollution, heat, or poor ventilation is contributing to physical symptoms — not just whether air quality is poor in isolation.
 
+<img width="1402" height="1122" alt="ChatGPT Image Jun 17, 2026 at 01_40_15 AM" src="https://github.com/user-attachments/assets/eb08010b-9660-4e7b-a6ba-0cf23ba005df" />
+
 | Layer | Node | Sensors |
 |---|---|---|
 | Exposure | External badge / bag | PM2.5, VOC, Temperature, Humidity, CO2 |
@@ -25,4 +27,6 @@ Fusing both streams lets the system distinguish between high pollution with no p
 
 This repository implements the FPGA inference core. Phase 1 classifies five fused sensor channels (PM2.5, VOC, Heat Index, HR, SpO2) using a 2-layer INT8 neural network in Verilog RTL on the GW2AR-18. Full two-wearable integration and BiLSTM temporal fusion are planned for Phase 2.
 
+
+<img width="1672" height="941" alt="generated-image" src="https://github.com/user-attachments/assets/a4e26358-7210-492a-8db6-d6a221093296" />
 
