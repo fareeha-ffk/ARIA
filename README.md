@@ -246,11 +246,9 @@ Run `gtkwave tb/<module>.vcd` for each module:
 
 ## Future Work
 
-| Goal | Timeline | Impact |
-|------|----------|--------|
-| PMS5003 particle counter integration | Q3 2026 | PM2.5 ground-truth |
-| Real Dhaka field dataset collection | Q4 2026 | Retrain model (add Safe class) |
-| Layer 2 accumulators (24→32-bit) | Q3 2026 | Eliminate overflow edge cases |
-| BiLSTM temporal fusion on FPGA | Q1 2027 | Temporal pattern analysis |
-| On-device continual learning | Q2 2027 | Personalized risk scoring |
-| Geo-tagged exposure heatmaps | Q2 2027 | Mobile app closed-loop |
+- **PMS5003 particle counter integration** — PM2.5 ground-truth
+- **Real Dhaka field dataset collection** — Retrain model (add Safe class)
+- **Layer 2 accumulators (24→32-bit)** — Eliminate overflow edge cases
+- **BiLSTM temporal fusion on FPGA** — Temporal pattern analysis
+- **On-device continual learning** — Personalized risk scoring
+- **Geo-tagged exposure heatmaps** — Mobile app closed-loop
