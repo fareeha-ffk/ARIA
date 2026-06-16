@@ -168,17 +168,26 @@ ARIA uses a 3-layer verification approach:
   
 ## Verification Results (1,059 Tests, 98.8% Pass)
 
+| Test Suite | Total Tests | Passed | Failed | Pass Rate | Status |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Unit Tests (Modules)** | 50 | 47 | 3 | 94.0% | 🟡 `PARTIAL` |
+| **Golden Vectors** | 1,002 | 992 | 10 | 99.0% | 🟡 `PARTIAL` |
+| **SVA Properties** | 7 | 7 | 0 | 100% | 🟢 `PASS` |
+
+<details>
+<summary><b>🔍 Click to expand individual module breakdown</b></summary>
+
 | Module | Tests | Passed | Failed | Result |
-|--------|-------|--------|--------|--------|
-| uart_rx.v | 13 | 13 | 0 | ✅ PASS |
-| async_fifo.v | 15 | 15 | 0 | ✅ PASS |
-| validity_reg.v | 4 | 4 | 0 | ✅ PASS |
-| power_fsm.v | 5 | 5 | 0 | ✅ PASS |
-| goai_wrapper_nn.v* | 5 | 2 | 3 | ⚠️ PARTIAL |
-| output_fsm.v | 6 | 6 | 0 | ✅ PASS |
-| top.v (system) | 2 | 2 | 0 | ✅ PASS |
-| **Golden vectors** | **1,002** | **992** | **10** | **99.0%** |
-| **SVA properties** | **7** | **7** | **0** | **✅ PASS** |
+| :--- | :---: | :---: | :---: | :--- |
+| `uart_rx.v` | 13 | 13 | 0 | 🟢 `PASS` |
+| `async_fifo.v` | 15 | 15 | 0 | 🟢 `PASS` |
+| `validity_reg.v` | 4 | 4 | 0 | 🟢 `PASS` |
+| `power_fsm.v` | 5 | 5 | 0 | 🟢 `PASS` |
+| `goai_wrapper_nn.v`* | 5 | 2 | 3 | 🟡 `FAIL` (Quantization delta) |
+| `output_fsm.v` | 6 | 6 | 0 | 🟢 `PASS` |
+| `top.v` | 2 | 2 | 0 | 🟢 `PASS` |
+
+</details>
 
 *Directed test failures: arbitrary values not matching model boundaries (see [Limitations]). Golden vectors use real model inputs.
 
