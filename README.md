@@ -7,6 +7,14 @@ Real-time air quality classifier running a 2-layer INT8 neural network entirely 
 ![SVA](https://img.shields.io/badge/SVA%20Violations-0-blue)
 ![Tests](https://img.shields.io/badge/Tests-1046%2F1059-yellow)
 
+ARIA is a wearable air-quality monitor that processes everything locally on a tiny chip — no cloud, no internet, no external processor.
+
+Most air-quality monitors today fall into two categories:
+
+Cheap monitors that just display raw sensor numbers, leaving you to figure out what they mean
+Smart monitors that send data to the cloud for processing — which adds latency, drains battery, raises privacy concerns, and requires WiFi
+ARIA does neither. It runs a neural network directly on an FPGA chip. It takes sensor readings, processes them through an AI model in hardware, and outputs a simple, actionable result: Safe, Warning, or Danger.
+
 
 ## Vision
 
